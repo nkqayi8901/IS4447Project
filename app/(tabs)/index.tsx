@@ -1,98 +1,145 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+﻿import { useRouter, useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
+import {
+  FlatList, StyleSheet, Text, TextInput,
+  TouchableOpacity, View,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db/client';
+import { trips, activities } from '@/db/schema';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { seedIfEmpty } from '@/db/seed';
+import TripCard from '@/components/TripCard';
+import EmptyState from '@/components/EmptyState';
+import { calculateStreak } from '@/utils/streaks';
+import { text, shadow, radius, spacing } from '@/constants/Styles';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+// This is the main screen for the Trips tab. It displays a list of the user's planned trips, along with a search bar to filter by destination.
+// Each trip card shows the trip name, destination, dates, number of activities, and current streak. Tapping a trip navigates to the trip details screen.
+// The screen also includes a 
+// floating action button to add a new trip. 
+// If there are no trips, it shows an empty state 
+// with a prompt to add the first trip.
+// The screen uses useFocusEffect to 
+// load the trips from the database whenever the screen is focused, 
+// ensuring it always shows the latest data after adding/editing trips or activities.
+type TripWithMeta = {
+  id: number; name: string; destination: string;
+  startDate: string; endDate: string; notes: string | null;
+  activityCount: number; streak: number;
+};
 
-export default function HomeScreen() {
+export default function TripsScreen() {
+  const { user } = useAuth();
+  const { theme } = useTheme();
+  const router = useRouter();
+  const [tripList, setTripList] = useState<TripWithMeta[]>([]);
+  const [search, setSearch] = useState('');
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!user) return;
+      const load = async () => {
+        await seedIfEmpty(user.id);
+        const rows = await db.select().from(trips).where(eq(trips.userId, user.id));
+        const enriched = await Promise.all(
+          rows.map(async t => {
+            const acts = await db.select().from(activities).where(eq(activities.tripId, t.id));
+            return { ...t, activityCount: acts.length, streak: calculateStreak(acts) };
+          })
+        );
+        setTripList(enriched.sort((a, b) => b.startDate.localeCompare(a.startDate)));
+      };
+      void load();
+    }, [user])
+  );
+
+  const filtered = tripList.filter(t =>
+    t.name.toLowerCase().includes(search.toLowerCase()) ||
+    t.destination.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      {/* Header */}
+      <View style={[styles.headerArea, { backgroundColor: theme.surface }]}>
+        <View>
+          <Text style={[text.h2, { color: theme.text }]}>My Trips</Text>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
+            {tripList.length} trip{tripList.length !== 1 ? 's' : ''} planned
+          </Text>
+        </View>
+        <View style={[styles.searchBar, { backgroundColor: theme.background, borderColor: theme.border }]}>
+          <Ionicons name="search-outline" size={16} color={theme.textSecondary} />
+          <TextInput
+            style={[styles.searchInput, { color: theme.text }]}
+            placeholder="Search destinations..."
+            placeholderTextColor={theme.textSecondary}
+            value={search}
+            onChangeText={setSearch}
+            accessibilityLabel="Search trips"
+          />
+          {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch('')}>
+              <Ionicons name="close-circle" size={16} color={theme.textSecondary} />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <FlatList
+        data={filtered}
+        keyExtractor={item => String(item.id)}
+        renderItem={({ item }) => (
+          <TripCard
+            name={item.name}
+            destination={item.destination}
+            startDate={item.startDate}
+            endDate={item.endDate}
+            activityCount={item.activityCount}
+            streak={item.streak}
+            onPress={() => router.push(`/trip/${item.id}` as any)}
+          />
+        )}
+        ListEmptyComponent={
+          <EmptyState
+            icon="airplane-outline"
+            title="No trips yet"
+            subtitle="Tap the + button to plan your first adventure"
+          />
+        }
+        contentContainerStyle={[styles.list, filtered.length === 0 && { flex: 1 }]}
+        showsVerticalScrollIndicator={false}
+      />
+
+      <TouchableOpacity
+        style={[styles.fab, { backgroundColor: theme.primary }, shadow.fab]}
+        onPress={() => router.push('/trip/add' as any)}
+        accessibilityRole="button"
+        accessibilityLabel="Add new trip"
+      >
+        <Ionicons name="add" size={30} color="#fff" />
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: { flex: 1 },
+  headerArea: { padding: spacing.xl, paddingTop: spacing.lg, gap: 12 },
+  subtitle: { fontFamily: 'Poppins_400Regular', fontSize: 13, marginTop: 2 },
+  searchBar: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    paddingHorizontal: 14, paddingVertical: 10,
+    borderRadius: radius.lg, borderWidth: 1.5,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  searchInput: { flex: 1, fontFamily: 'Poppins_400Regular', fontSize: 14 },
+  list: { padding: spacing.lg, paddingBottom: 100 },
+  fab: {
+    position: 'absolute', right: 20, bottom: 24,
+    width: 60, height: 60, borderRadius: 30,
+    alignItems: 'center', justifyContent: 'center',
   },
 });

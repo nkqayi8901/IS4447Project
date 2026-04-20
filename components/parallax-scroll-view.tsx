@@ -10,7 +10,10 @@ import Animated, {
 import { ThemedView } from '@/components/themed-view';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColor } from '@/hooks/use-theme-color';
-
+// This component is a custom ScrollView that implements a parallax effect on the header image. The header image moves at a different speed than the scroll content, creating a visually appealing effect as the user scrolls through the content. The component takes in a header image and background color for the header, and it uses the app's theme to style the background of the scroll view. The parallax effect is achieved using the useAnimatedStyle hook from react-native-reanimated, which allows for smooth animations based on the scroll offset.
+// The ParallaxScrollView component is designed to be reusable across different screens in the app where a parallax header is desired. It provides a flexible way to display a header image with a dynamic background color that adapts to the current theme (light or dark). The scroll content is wrapped in a ThemedView to ensure that it also adheres to the app's theme styling. Overall, this component enhances the visual appeal of the app while maintaining consistency with the app's design system.
+// The component receives props for the header image, which is a React element that can be any image or custom component, and the header background color, which is an object containing colors for both dark and light themes. The scroll content is passed as children to the ParallaxScrollView, allowing for flexible content rendering while maintaining the parallax effect on the header. The use of react-native-reanimated ensures that the animations are smooth and performant, even on lower-end devices, providing a high-quality user experience throughout the app.
+// The HEADER_HEIGHT constant defines the height of the header image, which is used to calculate the parallax effect. The scroll offset is used to determine how much the header image should translate and scale as the user scrolls. The interpolate function is used to create a smooth transition for both the translateY and scale transformations based on the scroll offset, creating a dynamic and engaging visual effect as the user interacts with the scroll view.
 const HEADER_HEIGHT = 250;
 
 type Props = PropsWithChildren<{
