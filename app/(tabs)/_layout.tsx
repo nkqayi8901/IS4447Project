@@ -3,6 +3,8 @@ import { ActivityIndicator, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useEffect } from 'react';
+import { seedIfEmpty } from '@/db/seed';
 
 // This layout handles the main app flow after authentication.
 // If the user is not logged in, it redirects to the login screen.
@@ -22,6 +24,10 @@ export default function TabLayout() {
       </View>
     );
   }
+
+  useEffect(() => {
+    if (user) void seedIfEmpty(user.id);
+  }, [user]);
 
   if (!user) return <Redirect href="/(auth)/login" />;
 

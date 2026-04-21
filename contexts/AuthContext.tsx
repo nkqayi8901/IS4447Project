@@ -4,7 +4,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { eq } from "drizzle-orm";
 import * as Crypto from "expo-crypto";
 import { createContext, useContext, useEffect, useState } from "react";
-
+// This context manages user authentication state and 
+// provides functions for logging in, registering, logging out, and deleting the account. 
+// It uses AsyncStorage to persist the user's login state across app launches and Drizzle ORM to interact with the SQLite database for user data. 
+// The password is hashed using SHA-256 before being stored in the database for security. The context also provides a loading state while checking the user's authentication status on app launch.
+// The AuthProvider component wraps the app and provides the authentication context to all child components.
+// The useAuth hook allows components to easily access the authentication context and perform actions like logging in, registering, and logging out. 
+// This centralized authentication management helps maintain a clean codebase and ensures that all components can easily access and modify the user's authentication state as needed.
 const SALT = "TripPlannerSalt2024";
 
 async function hashPassword(password: string): Promise<string> {

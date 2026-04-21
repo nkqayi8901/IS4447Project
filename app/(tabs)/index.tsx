@@ -5,7 +5,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { db } from "@/db/client";
 import { activities, trips } from "@/db/schema";
-import { seedIfEmpty } from "@/db/seed";
 import { calculateStreak } from "@/utils/streaks";
 import { Ionicons } from "@expo/vector-icons";
 import { eq } from "drizzle-orm";
@@ -51,7 +50,6 @@ export default function TripsScreen() {
     useCallback(() => {
       if (!user) return;
       const load = async () => {
-        await seedIfEmpty(user.id);
         const rows = await db
           .select()
           .from(trips)
