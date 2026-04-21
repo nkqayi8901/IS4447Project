@@ -91,7 +91,7 @@ export default function RegisterScreen() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => router.replace('/(auth)/login')} style={styles.link}>
+        <TouchableOpacity onPress={() => router.replace('/(auth)/login' as any)} style={styles.link}>
           <Text style={[text.body, { color: theme.textSecondary }]}>
             Already have an account?{' '}
             <Text style={{ color: theme.primary, fontFamily: 'Poppins_600SemiBold' }}>Log in</Text>

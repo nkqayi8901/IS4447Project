@@ -1,34 +1,43 @@
-﻿import { useRouter, useFocusEffect } from 'expo-router';
-import { useCallback, useState } from 'react';
+﻿import EmptyState from "@/components/EmptyState";
+import TripCard from "@/components/TripCard";
+import { radius, shadow, spacing, text } from "@/constants/Styles";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { db } from "@/db/client";
+import { activities, trips } from "@/db/schema";
+import { seedIfEmpty } from "@/db/seed";
+import { calculateStreak } from "@/utils/streaks";
+import { Ionicons } from "@expo/vector-icons";
+import { eq } from "drizzle-orm";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import {
-  FlatList, StyleSheet, Text, TextInput,
-  TouchableOpacity, View,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { eq } from 'drizzle-orm';
-import { db } from '@/db/client';
-import { trips, activities } from '@/db/schema';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { seedIfEmpty } from '@/db/seed';
-import TripCard from '@/components/TripCard';
-import EmptyState from '@/components/EmptyState';
-import { calculateStreak } from '@/utils/streaks';
-import { text, shadow, radius, spacing } from '@/constants/Styles';
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 // This is the main screen for the Trips tab. It displays a list of the user's planned trips, along with a search bar to filter by destination.
 // Each trip card shows the trip name, destination, dates, number of activities, and current streak. Tapping a trip navigates to the trip details screen.
-// The screen also includes a 
-// floating action button to add a new trip. 
-// If there are no trips, it shows an empty state 
+// The screen also includes a
+// floating action button to add a new trip.
+// If there are no trips, it shows an empty state
 // with a prompt to add the first trip.
-// The screen uses useFocusEffect to 
-// load the trips from the database whenever the screen is focused, 
+// The screen uses useFocusEffect to
+// load the trips from the database whenever the screen is focused,
 // ensuring it always shows the latest data after adding/editing trips or activities.
 type TripWithMeta = {
-  id: number; name: string; destination: string;
-  startDate: string; endDate: string; notes: string | null;
-  activityCount: number; streak: number;
+  id: number;
+  name: string;
+  destination: string;
+  startDate: string;
+  endDate: string;
+  notes: string | null;
+  activityCount: number;
+  streak: number;
 };
 
 export default function TripsScreen() {
@@ -36,29 +45,42 @@ export default function TripsScreen() {
   const { theme } = useTheme();
   const router = useRouter();
   const [tripList, setTripList] = useState<TripWithMeta[]>([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   useFocusEffect(
     useCallback(() => {
       if (!user) return;
       const load = async () => {
         await seedIfEmpty(user.id);
-        const rows = await db.select().from(trips).where(eq(trips.userId, user.id));
+        const rows = await db
+          .select()
+          .from(trips)
+          .where(eq(trips.userId, user.id));
         const enriched = await Promise.all(
-          rows.map(async t => {
-            const acts = await db.select().from(activities).where(eq(activities.tripId, t.id));
-            return { ...t, activityCount: acts.length, streak: calculateStreak(acts) };
-          })
+          rows.map(async (t) => {
+            const acts = await db
+              .select()
+              .from(activities)
+              .where(eq(activities.tripId, t.id));
+            return {
+              ...t,
+              activityCount: acts.length,
+              streak: calculateStreak(acts),
+            };
+          }),
         );
-        setTripList(enriched.sort((a, b) => b.startDate.localeCompare(a.startDate)));
+        setTripList(
+          enriched.sort((a, b) => b.startDate.localeCompare(a.startDate)),
+        );
       };
       void load();
-    }, [user])
+    }, [user]),
   );
 
-  const filtered = tripList.filter(t =>
-    t.name.toLowerCase().includes(search.toLowerCase()) ||
-    t.destination.toLowerCase().includes(search.toLowerCase())
+  const filtered = tripList.filter(
+    (t) =>
+      t.name.toLowerCase().includes(search.toLowerCase()) ||
+      t.destination.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -68,11 +90,20 @@ export default function TripsScreen() {
         <View>
           <Text style={[text.h2, { color: theme.text }]}>My Trips</Text>
           <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            {tripList.length} trip{tripList.length !== 1 ? 's' : ''} planned
+            {tripList.length} trip{tripList.length !== 1 ? "s" : ""} planned
           </Text>
         </View>
-        <View style={[styles.searchBar, { backgroundColor: theme.background, borderColor: theme.border }]}>
-          <Ionicons name="search-outline" size={16} color={theme.textSecondary} />
+        <View
+          style={[
+            styles.searchBar,
+            { backgroundColor: theme.background, borderColor: theme.border },
+          ]}
+        >
+          <Ionicons
+            name="search-outline"
+            size={16}
+            color={theme.textSecondary}
+          />
           <TextInput
             style={[styles.searchInput, { color: theme.text }]}
             placeholder="Search destinations..."
@@ -82,8 +113,12 @@ export default function TripsScreen() {
             accessibilityLabel="Search trips"
           />
           {search.length > 0 && (
-            <TouchableOpacity onPress={() => setSearch('')}>
-              <Ionicons name="close-circle" size={16} color={theme.textSecondary} />
+            <TouchableOpacity onPress={() => setSearch("")}>
+              <Ionicons
+                name="close-circle"
+                size={16}
+                color={theme.textSecondary}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -91,7 +126,7 @@ export default function TripsScreen() {
 
       <FlatList
         data={filtered}
-        keyExtractor={item => String(item.id)}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <TripCard
             name={item.name}
@@ -110,13 +145,16 @@ export default function TripsScreen() {
             subtitle="Tap the + button to plan your first adventure"
           />
         }
-        contentContainerStyle={[styles.list, filtered.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[
+          styles.list,
+          filtered.length === 0 && { flex: 1 },
+        ]}
         showsVerticalScrollIndicator={false}
       />
 
       <TouchableOpacity
         style={[styles.fab, { backgroundColor: theme.primary }, shadow.fab]}
-        onPress={() => router.push('/trip/add' as any)}
+        onPress={() => router.push("/trip/add" as any)}
         accessibilityRole="button"
         accessibilityLabel="Add new trip"
       >
@@ -129,17 +167,26 @@ export default function TripsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   headerArea: { padding: spacing.xl, paddingTop: spacing.lg, gap: 12 },
-  subtitle: { fontFamily: 'Poppins_400Regular', fontSize: 13, marginTop: 2 },
+  subtitle: { fontFamily: "Poppins_400Regular", fontSize: 13, marginTop: 2 },
   searchBar: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    paddingHorizontal: 14, paddingVertical: 10,
-    borderRadius: radius.lg, borderWidth: 1.5,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: radius.lg,
+    borderWidth: 1.5,
   },
-  searchInput: { flex: 1, fontFamily: 'Poppins_400Regular', fontSize: 14 },
+  searchInput: { flex: 1, fontFamily: "Poppins_400Regular", fontSize: 14 },
   list: { padding: spacing.lg, paddingBottom: 100 },
   fab: {
-    position: 'absolute', right: 20, bottom: 24,
-    width: 60, height: 60, borderRadius: 30,
-    alignItems: 'center', justifyContent: 'center',
+    position: "absolute",
+    right: 20,
+    bottom: 24,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

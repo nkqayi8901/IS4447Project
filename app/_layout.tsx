@@ -46,6 +46,7 @@ function RootContent() {
           headerTintColor: theme.primary,
           headerTitleStyle: { fontFamily: 'Poppins_700Bold', fontSize: 17 },
           headerShadowVisible: false,
+          headerBackTitle: '',
           contentStyle: { backgroundColor: theme.background },
           animation: 'slide_from_right',
         }}
