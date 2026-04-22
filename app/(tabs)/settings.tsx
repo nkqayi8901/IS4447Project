@@ -19,7 +19,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// This is the Settings screen. It allows users to view their profile information, toggle dark mode and daily reminders, and manage their account (log out or delete account).
+// This is the Settings screens. It allows users to view their profile information, toggle dark mode and daily reminders, and manage their account (log out or delete account).
 // The screen is divided into sections for Appearance, Data, and Account. Each section contains relevant settings and actions.
 // The "Load Demo Data" action adds sample trips and activities to the user's account for testing purposes.
 // The screen uses the app's theme for styling and
@@ -193,7 +193,7 @@ export default function SettingsScreen() {
         <Row
           icon="albums"
           label="Categories"
-          onPress={() => router.push("/category/index" as any)}
+          onPress={() => router.push("/category" as any)}
         />
         <Row
           icon="sparkles"

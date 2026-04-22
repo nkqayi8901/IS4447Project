@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// This screen shows the user's targets and their progress towards them. Each target displays its name, period (weekly/monthly), metric (number of activities or total duration),
+// This screen shows the user'ss targets and their progress towards them. Each target displays its name, period (weekly/monthly), metric (number of activities or total duration),
 // and a progress bar indicating how close the user is to achieving the target.
 // The screen loads the targets from the database and calculates the current progress based on the user's activities within the
 // target's period. It also sends a local notification when a target is achieved.
@@ -192,6 +192,12 @@ export default function TargetsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={[styles.infoBanner, { backgroundColor: theme.primary + '15', borderColor: theme.primary + '30' }]}>
+        <Ionicons name="information-circle-outline" size={16} color={theme.primary} />
+        <Text style={[styles.infoText, { color: theme.primary }]}>
+          Targets count your activities automatically — just add activities to your trips and progress updates here.
+        </Text>
+      </View>
       <FlatList
         data={targetList}
         keyExtractor={(item) => String(item.id)}
@@ -223,6 +229,8 @@ export default function TargetsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  infoBanner: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, margin: 16, marginBottom: 0, padding: 12, borderRadius: 10, borderWidth: 1 },
+  infoText: { flex: 1, fontSize: 12, lineHeight: 18, fontFamily: 'Poppins_400Regular' },
   list: { padding: 16, paddingBottom: 100 },
   card: { borderRadius: 14, borderWidth: 1, padding: 14, marginBottom: 12 },
   cardHeader: {

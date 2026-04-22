@@ -17,7 +17,7 @@ import {
 } from "react-native";
 // This screen allows users to view, add, edit, and delete categories for their activities. Each category is displayed as a row with its name, color, and icon, along with edit and delete buttons.
 // Users can tap the edit button to modify the category or the delete button to remove it (with a confirmation prompt). The screen also includes a floating action button to add a new category.
-// The screen uses useFocusEffect to load the categories from the database whenever the screen is focused, ensuring it always shows the latest data after adding/editing/deleting categories.
+// The sscreen uses useFocusEffect to load the categories from the database whenever the screen is focused, ensuring it always shows the latest data after adding/editing/deleting categories.
 // If there are no categories, it shows an empty state prompting the user to create their first category.
 // The screen is styled according to the app's theme and includes appropriate accessibility labels for better usability.
 // The screen retrieves the list of categories from the database on mount and populates the category list.

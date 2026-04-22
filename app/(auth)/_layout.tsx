@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ActivityIndicator, View } from 'react-native';
 
-// This layout handles the authentication flow.
+// Thiss layout handles the authentication flow.
 //  If the user is logged in, it redirects to the main app.
 //  If not, it shows the auth screens (login/signup).
 // It also shows a loading state while checking auth 

@@ -1,4 +1,5 @@
 import CategoryBadge from "@/components/CategoryBadge";
+import DatePickerField from "@/components/DatePickerField";
 import FormField from "@/components/FormField";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -18,7 +19,7 @@ import {
   View,
 } from "react-native";
 // This screen allows users to add a new activity to a specific trip. It includes form fields for the activity name, date, duration, count, notes, and category selection.
-// The screen validates the input and shows error messages for invalid fields. When the user saves the activity, it inserts the new record into the database and navigates back to the trip details screen.
+// The sscreen validates the input and shows error messages for invalid fields. When the user saves the activity, it inserts the new record into the database and navigates back to the trip details screen.
 // The category selection is displayed as a grid of badges,
 // and users can select one to categorize their activity. The screen also handles loading states and uses the app's theme for styling.
 // The screen is wrapped in a KeyboardAvoidingView to ensure the form is not obscured by the keyboard on mobile devices, and it uses a
@@ -54,7 +55,7 @@ export default function AddActivityScreen() {
   const validate = () => {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = "Activity name is required";
-    if (!date.match(/^\d{4}-\d{2}-\d{2}$/)) e.date = "Use YYYY-MM-DD format";
+    if (!date) e.date = "Please select a date";
     if (!selectedCat) e.category = "Please select a category";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -94,13 +95,11 @@ export default function AddActivityScreen() {
           onChangeText={setName}
           error={errors.name}
         />
-        <FormField
+        <DatePickerField
           label="Date"
-          placeholder="YYYY-MM-DD"
           value={date}
-          onChangeText={setDate}
+          onChange={setDate}
           error={errors.date}
-          keyboardType="numeric"
         />
 
         <View style={styles.row}>

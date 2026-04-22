@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import FormField from '@/components/FormField';
 import { text, shadow, radius, spacing } from '@/constants/Styles';
-// This is the registration screen. It allows new users to create an account by providing their name, email, and password.
+// Thiss is the registration screen. It allows new users to create an account by providing their name, email, and password.
 // It includes form validation to ensure all fields are filled, the password meets length requirements, and the confirmation matches.
 // If registration fails, it shows appropriate 
 // error messages. Like the login screen, it uses a 

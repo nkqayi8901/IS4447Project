@@ -50,6 +50,7 @@ export default function InsightsScreen() {
     totalActivities: 0,
     totalDuration: 0,
     totalTrips: 0,
+    totalCategories: 0,
   });
 
   useFocusEffect(
@@ -87,10 +88,12 @@ export default function InsightsScreen() {
           flatActs = flatActs.filter((a) => a.date >= monthAgo);
         }
 
+        const usedCatIds = new Set(flatActs.map((a) => a.categoryId));
         setStats({
           totalActivities: flatActs.length,
           totalDuration: flatActs.reduce((s, a) => s + a.durationMinutes, 0),
           totalTrips: userTrips.length,
+          totalCategories: usedCatIds.size,
         });
 
         // Bar chart: activities per day (last 7 days)
@@ -209,6 +212,15 @@ export default function InsightsScreen() {
         ))}
       </View>
 
+      {stats.totalActivities > 0 && (
+        <Text style={[styles.summary, { color: theme.textSecondary }]}>
+          {period === 'weekly' ? 'This week' : period === 'monthly' ? 'This month' : 'Overall'},{' '}
+          you completed <Text style={{ color: theme.text, fontWeight: '700' }}>{stats.totalActivities} {stats.totalActivities === 1 ? 'activity' : 'activities'}</Text>
+          {stats.totalCategories > 0 ? ` across ${stats.totalCategories} ${stats.totalCategories === 1 ? 'category' : 'categories'}` : ''}
+          {stats.totalDuration > 0 ? `, totalling ${Math.round(stats.totalDuration / 60)} ${Math.round(stats.totalDuration / 60) === 1 ? 'hour' : 'hours'}.` : '.'}
+        </Text>
+      )}
+
       {barData && barData.datasets[0].data.some((v) => v > 0) ? (
         <View
           style={[
@@ -302,4 +314,5 @@ const styles = StyleSheet.create({
   },
   chartTitle: { fontSize: 15, fontWeight: "700", marginBottom: 10 },
   chart: { borderRadius: 10 },
+  summary: { fontSize: 13, lineHeight: 20, marginHorizontal: 16, marginBottom: 16 },
 });

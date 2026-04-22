@@ -10,7 +10,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import FormField from '@/components/FormField';
 import { text, shadow, radius, spacing } from '@/constants/Styles';
 
-// This is the login screen. It allows 
+// Thiss is the login screen. It allows 
 // users to enter their email and password to log in.
 // It also handles form validation and shows 
 // error messages if login fails.

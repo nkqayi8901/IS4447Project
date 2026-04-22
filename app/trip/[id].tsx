@@ -138,7 +138,6 @@ export default function TripDetailScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView
-        stickyHeaderIndices={[1]}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
@@ -351,6 +350,10 @@ export default function TripDetailScreen() {
                 onPress={() =>
                   router.push(`/activity/${a.id}/edit?tripId=${id}` as any)
                 }
+                onDelete={async () => {
+                  await db.delete(activities).where(eq(activities.id, a.id));
+                  setActList((prev) => prev.filter((x) => x.id !== a.id));
+                }}
               />
             ))
           )}

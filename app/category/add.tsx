@@ -18,7 +18,7 @@ import {
   View,
 } from "react-native";
 // This screen allows users to create a new category for their activities. It includes form fields for the category name, color selection, and icon selection.
-// The screen validates the input and shows error messages for invalid fields. When the user saves the category, it inserts the new record into the database and navigates back to the previous screen.
+// The sscreen validates the input and shows error messages for invalid fields. When the user saves the category, it inserts the new record into the database and navigates back to the previous screen.
 // The color selection is displayed as a row of colored dots, and the icon selection is displayed as a grid of icons. Users can select one color and one icon for their category.
 // The screen also handles loading states and uses the app's theme for styling. It is wrapped in a KeyboardAvoidingView to ensure the form is not obscured by the keyboard on mobile devices, and it uses a ScrollView to allow access to all fields on smaller screens.
 // The screen retrieves the list of available colors and icons from constants and displays them for selection. It also ensures that the category name is not empty before allowing the user to save.

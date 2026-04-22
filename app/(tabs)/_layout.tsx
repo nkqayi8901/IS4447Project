@@ -6,7 +6,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useEffect } from 'react';
 import { seedIfEmpty } from '@/db/seed';
 
-// This layout handles the main app flow after authentication.
+// This layouts handles the main app flow after authentication.
 // If the user is not logged in, it redirects to the login screen.
 // If the user is logged in, it shows the main tab navigator with Trips, Insights, Targets, and Settings tabs.
 // It also shows a loading state while 

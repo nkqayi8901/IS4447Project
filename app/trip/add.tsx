@@ -1,3 +1,4 @@
+import DatePickerField from "@/components/DatePickerField";
 import FormField from "@/components/FormField";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -32,10 +33,8 @@ export default function AddTripScreen() {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = "Trip name is required";
     if (!destination.trim()) e.destination = "Destination is required";
-    if (!startDate.match(/^\d{4}-\d{2}-\d{2}$/))
-      e.startDate = "Use YYYY-MM-DD format";
-    if (!endDate.match(/^\d{4}-\d{2}-\d{2}$/))
-      e.endDate = "Use YYYY-MM-DD format";
+    if (!startDate) e.startDate = "Please select a start date";
+    if (!endDate) e.endDate = "Please select an end date";
     if (startDate && endDate && endDate < startDate)
       e.endDate = "End date must be after start date";
     setErrors(e);
@@ -82,21 +81,17 @@ export default function AddTripScreen() {
           onChangeText={setDestination}
           error={errors.destination}
         />
-        <FormField
+        <DatePickerField
           label="Start Date"
-          placeholder="YYYY-MM-DD"
           value={startDate}
-          onChangeText={setStartDate}
+          onChange={setStartDate}
           error={errors.startDate}
-          keyboardType="numeric"
         />
-        <FormField
+        <DatePickerField
           label="End Date"
-          placeholder="YYYY-MM-DD"
           value={endDate}
-          onChangeText={setEndDate}
+          onChange={setEndDate}
           error={errors.endDate}
-          keyboardType="numeric"
         />
         <FormField
           label="Notes (optional)"

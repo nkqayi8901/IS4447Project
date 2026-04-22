@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import 'react-native-reanimated';
 import {
   useFonts,
   Poppins_400Regular,
@@ -58,7 +57,7 @@ function RootContent() {
         <Stack.Screen name="trip/[id]/edit" options={{ title: 'Edit Trip', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="activity/add" options={{ title: 'Add Activity', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="activity/[id]/edit" options={{ title: 'Edit Activity', presentation: 'modal', headerTintColor: theme.primary }} />
-        <Stack.Screen name="category/index" options={{ title: 'Categories', headerTintColor: theme.primary }} />
+        <Stack.Screen name="category" options={{ title: 'Categories', headerTintColor: theme.primary }} />
         <Stack.Screen name="category/add" options={{ title: 'New Category', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="category/[id]/edit" options={{ title: 'Edit Category', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="target/add" options={{ title: 'New Target', presentation: 'modal', headerTintColor: theme.primary }} />

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 import { shadow, radius } from '@/constants/Styles';
@@ -17,13 +17,21 @@ type Props = {
   categoryColor: string;
   categoryIcon: string;
   onPress: () => void;
+  onDelete?: () => void;
 };
 
 export default function ActivityCard({
   name, date, durationMinutes, count, notes,
-  categoryName, categoryColor, categoryIcon, onPress,
+  categoryName, categoryColor, categoryIcon, onPress, onDelete,
 }: Props) {
   const { theme } = useTheme();
+
+  const confirmDelete = () => {
+    Alert.alert('Delete Activity', `Delete "${name}"?`, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: onDelete },
+    ]);
+  };
 
   return (
     <TouchableOpacity
@@ -37,7 +45,14 @@ export default function ActivityCard({
       <View style={styles.content}>
         <View style={styles.top}>
           <Text style={[styles.name, { color: theme.text }]} numberOfLines={1}>{name}</Text>
-          <CategoryBadge name={categoryName} color={categoryColor} icon={categoryIcon} small />
+          <View style={styles.topRight}>
+            <CategoryBadge name={categoryName} color={categoryColor} icon={categoryIcon} small />
+            {onDelete && (
+              <TouchableOpacity onPress={confirmDelete} hitSlop={8} accessibilityLabel="Delete activity">
+                <Ionicons name="trash-outline" size={15} color={theme.danger} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         {notes ? <Text style={[styles.notes, { color: theme.textSecondary }]} numberOfLines={2}>{notes}</Text> : null}
         <View style={styles.footer}>
@@ -70,6 +85,7 @@ const styles = StyleSheet.create({
   top: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 6 },
   name: { fontFamily: 'Poppins_600SemiBold', fontSize: 14, flex: 1 },
   notes: { fontFamily: 'Poppins_400Regular', fontSize: 12, lineHeight: 17, marginBottom: 8 },
+  topRight: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   footer: { flexDirection: 'row', gap: 12 },
   metaItem: { flexDirection: 'row', alignItems: 'center', gap: 3 },
   meta: { fontFamily: 'Poppins_400Regular', fontSize: 11 },
