@@ -5,7 +5,12 @@ export type WeatherData = {
   city: string;
   windspeed: number;
 };
-
+// The weather.ts file contains utility functions for fetching weather data based on a city name. 
+// It uses the Open-Meteo API to first geocode the city name into latitude and longitude coordinates, and then 
+// fetches the current weather conditions for those coordinates. The WMO_CODES constant maps weather codes from the API to human-readable descriptions and corresponding icons. The WEATHER_SUGGESTIONS constant provides activity suggestions based on the
+//  current weather conditions, which can be used in the app to recommend activities to users based on the weather forecast for their trip destinations.
+// The fetchWeather function takes a city name as input, performs the necessary API calls to retrieve the weather data, and returns a WeatherData object containing the temperature, weather description, icon name, city name, and wind speed. If any of the API calls fail or if the city cannot be geocoded, the function returns null. This utility function can be used throughout the app to
+//  display weather information for trip destinations and provide relevant activity suggestions based on the current weather conditions.
 const WMO_CODES: Record<number, { label: string; icon: string }> = {
   0:  { label: 'Clear sky',        icon: 'sunny'        },
   1:  { label: 'Mainly clear',     icon: 'partly-sunny' },
