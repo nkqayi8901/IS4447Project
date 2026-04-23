@@ -1,5 +1,8 @@
 Solomon Github Link : https://github.com/nkqayi8901/IS4447Project
-Solomon Expo Link: 
+
+Solomon Expo Link: https://qr.expo.dev/eas-update?slug=exp&projectId=0353fba0-8f79-48ad-83a7-d7e17709c2ff&groupId=cfbab6b5-55c0-407b-ad91-5d4f193fa1cc&host=u.expo.dev
+
+Spectacular Solomon’s Trip Planner - Option B Holiday Planner
 
 
 # Welcome to your Expo app 👋
