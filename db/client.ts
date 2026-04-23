@@ -62,4 +62,10 @@ sqlite.execSync(`
   );
 `);
 
+try {
+  sqlite.execSync(`ALTER TABLE activities ADD COLUMN completed INTEGER NOT NULL DEFAULT 0`);
+} catch {
+  // column already exists on fresh installs — safe to ignore
+}
+
 export const db = drizzle(sqlite);

@@ -1,4 +1,5 @@
 import DatePickerField from "@/components/DatePickerField";
+import DestinationField from "@/components/DestinationField";
 import FormField from "@/components/FormField";
 import { useTheme } from "@/contexts/ThemeContext";
 import { db } from "@/db/client";
@@ -90,11 +91,10 @@ export default function EditTripScreen() {
           onChangeText={setName}
           error={errors.name}
         />
-        <FormField
+        <DestinationField
           label="Destination"
-          placeholder="e.g. Paris, France"
           value={destination}
-          onChangeText={setDestination}
+          onChange={setDestination}
           error={errors.destination}
         />
         <DatePickerField

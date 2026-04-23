@@ -89,12 +89,16 @@ export default function TripsScreen() {
             <Text style={[styles.greeting, { color: theme.textSecondary }]}>{getGreeting()},</Text>
             <Text style={[text.h2, { color: theme.text }]}>{firstName} ✈️</Text>
           </View>
-          {(ongoingCount > 0) && (
-            <View style={[styles.ongoingBadge, { backgroundColor: theme.success + '20' }]}>
-              <View style={[styles.ongoingDot, { backgroundColor: theme.success }]} />
-              <Text style={[styles.ongoingText, { color: theme.success }]}>Trip active</Text>
-            </View>
-          )}
+          <TouchableOpacity
+            style={[styles.bellBtn, { backgroundColor: theme.card, borderColor: theme.border }]}
+            onPress={() => router.push('/notifications' as any)}
+            accessibilityLabel="Notifications"
+          >
+            <Ionicons name="notifications-outline" size={20} color={theme.text} />
+            {(ongoingCount > 0 || tripList.some(t => { const d = Math.ceil((new Date(t.startDate + 'T00:00:00').getTime() - new Date().getTime()) / 86400000); return d >= 0 && d <= 3; })) && (
+              <View style={[styles.bellDot, { backgroundColor: theme.primary }]} />
+            )}
+          </TouchableOpacity>
         </View>
 
         {tripList.length > 0 && (
@@ -182,6 +186,8 @@ const styles = StyleSheet.create({
   statLabel: { fontFamily: 'Poppins_400Regular', fontSize: 11 },
   searchBar: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.lg, borderWidth: 1.5 },
   searchInput: { flex: 1, fontFamily: 'Poppins_400Regular', fontSize: 14 },
+  bellBtn: { width: 38, height: 38, borderRadius: 19, borderWidth: 1, alignItems: 'center', justifyContent: 'center', marginTop: 4 },
+  bellDot: { position: 'absolute', top: 7, right: 7, width: 8, height: 8, borderRadius: 4 },
   list: { padding: spacing.lg, paddingBottom: 100 },
   fab: { position: 'absolute', right: 20, bottom: 24, width: 60, height: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' },
 });

@@ -51,15 +51,16 @@ function RootContent() {
         }}
       >
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false, title: '' }} />
         <Stack.Screen name="trip/add" options={{ title: 'New Trip', presentation: 'modal', headerStyle: { backgroundColor: theme.surface }, headerTitleStyle: { fontFamily: 'Poppins_700Bold', fontSize: 17 }, headerTintColor: theme.primary }} />
-        <Stack.Screen name="trip/[id]" options={{ headerTransparent: true, title: '', headerTintColor: '#fff' }} />
+        <Stack.Screen name="trip/[id]" options={{ title: '', headerTintColor: theme.primary }} />
         <Stack.Screen name="trip/[id]/edit" options={{ title: 'Edit Trip', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="activity/add" options={{ title: 'Add Activity', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="activity/[id]/edit" options={{ title: 'Edit Activity', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="category" options={{ title: 'Categories', headerTintColor: theme.primary }} />
         <Stack.Screen name="category/add" options={{ title: 'New Category', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="category/[id]/edit" options={{ title: 'Edit Category', presentation: 'modal', headerTintColor: theme.primary }} />
+        <Stack.Screen name="notifications" options={{ title: 'Notifications', headerTintColor: theme.primary }} />
         <Stack.Screen name="target/add" options={{ title: 'New Target', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="target/[id]/edit" options={{ title: 'Edit Target', presentation: 'modal', headerTintColor: theme.primary }} />
       </Stack>

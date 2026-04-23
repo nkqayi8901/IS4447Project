@@ -26,13 +26,13 @@ import {
 //  ScrollView to allow access to all fields on smaller screens.
 // The screen retrieves the list of categories from the database on mount and populates the category selection grid. If there are no categories, it prompts the user to create some in the settings before adding activities.
 export default function AddActivityScreen() {
-  const { tripId } = useLocalSearchParams<{ tripId: string }>();
+  const { tripId, name: prefillName } = useLocalSearchParams<{ tripId: string; name?: string }>();
   const { user } = useAuth();
   const { theme } = useTheme();
   const router = useRouter();
 
   const [cats, setCats] = useState<(typeof categories.$inferSelect)[]>([]);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(prefillName ?? "");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [duration, setDuration] = useState("");
   const [count, setCount] = useState("1");

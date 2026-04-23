@@ -4,7 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { db } from "@/db/client";
 import { activities, categories, trips } from "@/db/schema";
 import { exportActivitiesToCSV } from "@/utils/export";
-import { fetchWeather, WeatherData } from "@/utils/weather";
+import { fetchWeather, WeatherData, WEATHER_SUGGESTIONS } from "@/utils/weather";
 import { Ionicons } from "@expo/vector-icons";
 import { eq } from "drizzle-orm";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
@@ -126,7 +126,16 @@ export default function TripDetailScreen() {
     return true;
   });
 
+  const handleToggleComplete = async (actId: number, current: number) => {
+    const next = current === 1 ? 0 : 1;
+    await db.update(activities).set({ completed: next }).where(eq(activities.id, actId));
+    setActList((prev) => prev.map((x) => x.id === actId ? { ...x, completed: next } : x));
+  };
+
   if (!trip) return null;
+
+  const totalHours = Math.round(actList.reduce((s, a) => s + a.durationMinutes, 0) / 60);
+  const completedCount = actList.filter((a) => a.completed === 1).length;
 
   const formatDate = (d: string) =>
     new Date(d).toLocaleDateString("en-IE", {
@@ -139,6 +148,8 @@ export default function TripDetailScreen() {
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        overScrollMode="never"
       >
         {/* Header */}
         <View
@@ -209,18 +220,54 @@ export default function TripDetailScreen() {
               {trip.notes}
             </Text>
           ) : null}
-          {weather ? (
-            <View style={[styles.weatherRow, { backgroundColor: theme.primary + '15' }]}>
-              <Ionicons name={`${weather.icon}-outline` as any} size={18} color={theme.primary} />
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.weatherText, { color: theme.primary }]}>
-                  {weather.city} · {weather.temp}°C · {weather.description}
-                </Text>
-                <Text style={[styles.weatherSub, { color: theme.textSecondary }]}>
-                  Wind {weather.windspeed} km/h · via Open-Meteo
-                </Text>
+          {actList.length > 0 && (
+            <View style={styles.statsStrip}>
+              <View style={styles.statItem}>
+                <Text style={[styles.statNum, { color: theme.text }]}>{actList.length}</Text>
+                <Text style={[styles.statLbl, { color: theme.textSecondary }]}>activities</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: theme.border }]} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statNum, { color: theme.text }]}>{totalHours}h</Text>
+                <Text style={[styles.statLbl, { color: theme.textSecondary }]}>logged</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: theme.border }]} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statNum, { color: theme.success }]}>{completedCount}</Text>
+                <Text style={[styles.statLbl, { color: theme.textSecondary }]}>done</Text>
               </View>
             </View>
+          )}
+          {weather ? (
+            <>
+              <View style={[styles.weatherRow, { backgroundColor: theme.primary + '15' }]}>
+                <Ionicons name={`${weather.icon}-outline` as any} size={18} color={theme.primary} />
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.weatherText, { color: theme.primary }]}>
+                    {weather.city} · {weather.temp}°C · {weather.description}
+                  </Text>
+                  <Text style={[styles.weatherSub, { color: theme.textSecondary }]}>
+                    Wind {weather.windspeed} km/h · via Open-Meteo
+                  </Text>
+                </View>
+              </View>
+              {WEATHER_SUGGESTIONS[weather.icon] && (
+                <View style={styles.suggestionsRow}>
+                  <Text style={[styles.suggestLabel, { color: theme.textSecondary }]}>Suggested today:</Text>
+                  <View style={styles.suggChips}>
+                    {WEATHER_SUGGESTIONS[weather.icon].slice(0, 3).map((s) => (
+                      <TouchableOpacity
+                        key={s}
+                        style={[styles.suggChip, { backgroundColor: theme.card, borderColor: theme.border }]}
+                        onPress={() => router.push(`/activity/add?tripId=${id}&name=${encodeURIComponent(s)}` as any)}
+                      >
+                        <Text style={[styles.suggChipText, { color: theme.text }]}>{s}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </>
           ) : null}
         </View>
 
@@ -347,6 +394,7 @@ export default function TripDetailScreen() {
                 categoryName={a.categoryName}
                 categoryColor={a.categoryColor}
                 categoryIcon={a.categoryIcon}
+                completed={a.completed === 1}
                 onPress={() =>
                   router.push(`/activity/${a.id}/edit?tripId=${id}` as any)
                 }
@@ -354,6 +402,7 @@ export default function TripDetailScreen() {
                   await db.delete(activities).where(eq(activities.id, a.id));
                   setActList((prev) => prev.filter((x) => x.id !== a.id));
                 }}
+                onToggleComplete={() => handleToggleComplete(a.id, a.completed)}
               />
             ))
           )}
@@ -391,6 +440,11 @@ const styles = StyleSheet.create({
   dest: { fontSize: 14 },
   dates: { fontSize: 13, marginTop: 4 },
   notes: { fontSize: 13, marginTop: 8, lineHeight: 18 },
+  statsStrip: { flexDirection: 'row', alignItems: 'center', marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: '#E7E5E420' },
+  statItem: { flex: 1, alignItems: 'center' },
+  statNum: { fontSize: 18, fontWeight: '800' },
+  statLbl: { fontSize: 11, marginTop: 1 },
+  statDivider: { width: 1, height: 30 },
   actions: { flexDirection: "row", gap: 8 },
   iconBtn: {
     width: 36,
@@ -409,6 +463,11 @@ const styles = StyleSheet.create({
   },
   weatherText: { fontFamily: 'Poppins_600SemiBold', fontSize: 13 },
   weatherSub: { fontFamily: 'Poppins_400Regular', fontSize: 11, marginTop: 1 },
+  suggestionsRow: { marginTop: 8 },
+  suggestLabel: { fontFamily: 'Poppins_400Regular', fontSize: 11, marginBottom: 6 },
+  suggChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  suggChip: { borderRadius: 20, borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 },
+  suggChipText: { fontFamily: 'Poppins_400Regular', fontSize: 12 },
   filterBar: { paddingTop: 12, paddingBottom: 4 },
   searchRow: {
     flexDirection: "row",

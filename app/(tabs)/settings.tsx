@@ -1,7 +1,6 @@
 import { radius, shadow, spacing, text } from "@/constants/Styles";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { loadDemoData } from "@/db/seed";
 import {
   cancelDailyReminder,
   scheduleDailyReminder,
@@ -10,7 +9,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
@@ -32,32 +30,10 @@ export default function SettingsScreen() {
   const { theme, isDark, toggleTheme } = useTheme();
   const router = useRouter();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [loadingDemo, setLoadingDemo] = useState(false);
-
   const handleToggleNotifications = async (value: boolean) => {
     setNotificationsEnabled(value);
     if (value) await scheduleDailyReminder();
     else await cancelDailyReminder();
-  };
-
-  const handleLoadDemo = () => {
-    Alert.alert(
-      "Load Demo Data",
-      "This will add 2 sample trips (Paris & Tokyo) with activities and targets. Continue?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Load",
-          onPress: async () => {
-            if (!user) return;
-            setLoadingDemo(true);
-            await loadDemoData(user.id);
-            setLoadingDemo(false);
-            Alert.alert("Done!", "Demo data loaded. Check the Trips tab.");
-          },
-        },
-      ],
-    );
   };
 
   const handleLogout = () => {
@@ -194,17 +170,6 @@ export default function SettingsScreen() {
           icon="albums"
           label="Categories"
           onPress={() => router.push("/category" as any)}
-        />
-        <Row
-          icon="sparkles"
-          iconColor="#F59E0B"
-          label={loadingDemo ? "Loading demo data..." : "Load Demo Data"}
-          onPress={loadingDemo ? undefined : handleLoadDemo}
-          right={
-            loadingDemo ? (
-              <ActivityIndicator size="small" color={theme.primary} />
-            ) : undefined
-          }
         />
       </View>
 

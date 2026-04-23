@@ -36,6 +36,7 @@ type AuthContextType = {
     email: string,
     password: string,
   ) => Promise<string | null>;
+  resetPassword: (email: string, newPassword: string) => Promise<string | null>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
 };

@@ -36,6 +36,7 @@ export const activities = sqliteTable('activities', {
   durationMinutes: integer('duration_minutes').notNull().default(0),
   count: integer('count').notNull().default(1),
   notes: text('notes'),
+  completed: integer('completed').notNull().default(0),
   createdAt: text('created_at').notNull(),
 });
 

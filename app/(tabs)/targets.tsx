@@ -35,26 +35,6 @@ type TargetWithProgress = {
   categoryColor: string | null;
 };
 
-function getPeriodRange(period: string): { start: string; end: string } {
-  const now = new Date();
-  if (period === "weekly") {
-    const day = now.getDay();
-    const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-    const start = new Date(now.setDate(diff));
-    const end = new Date(start.getTime() + 6 * 86400000);
-    return {
-      start: start.toISOString().split("T")[0],
-      end: end.toISOString().split("T")[0],
-    };
-  }
-  const start = new Date(now.getFullYear(), now.getMonth(), 1)
-    .toISOString()
-    .split("T")[0];
-  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-    .toISOString()
-    .split("T")[0];
-  return { start, end };
-}
 
 export default function TargetsScreen() {
   const { user } = useAuth();
@@ -82,16 +62,13 @@ export default function TargetsScreen() {
 
         const enriched = await Promise.all(
           rows.map(async (t) => {
-            const { start, end } = getPeriodRange(t.period);
             let allActs: (typeof activities.$inferSelect)[] = [];
             for (const tripId of tripIds) {
               const acts = await db
                 .select()
                 .from(activities)
                 .where(eq(activities.tripId, tripId));
-              allActs.push(
-                ...acts.filter((a) => a.date >= start && a.date <= end),
-              );
+              allActs.push(...acts.filter((a) => a.completed === 1));
             }
             if (t.categoryId) {
               allActs = allActs.filter((a) => a.categoryId === t.categoryId);
@@ -195,7 +172,7 @@ export default function TargetsScreen() {
       <View style={[styles.infoBanner, { backgroundColor: theme.primary + '15', borderColor: theme.primary + '30' }]}>
         <Ionicons name="information-circle-outline" size={16} color={theme.primary} />
         <Text style={[styles.infoText, { color: theme.primary }]}>
-          Targets count your activities automatically — just add activities to your trips and progress updates here.
+          Targets count completed activities — tick the done checkbox on an activity to have it count toward your goals.
         </Text>
       </View>
       <FlatList

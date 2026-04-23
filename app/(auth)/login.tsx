@@ -109,7 +109,7 @@ export default function LoginScreen() {
           <Ionicons name="information-circle-outline" size={16} color={theme.primary} />
           <Text style={[styles.demoText, { color: theme.textSecondary }]}>
             New here? <Text style={{ color: theme.primary, fontFamily: 'Poppins_600SemiBold' }}>Register</Text> to create an account.{' '}
-            Load demo data from Settings after sign-up.
+            
           </Text>
         </View>
 
