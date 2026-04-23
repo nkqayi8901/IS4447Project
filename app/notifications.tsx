@@ -11,7 +11,9 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 // It shows users important alerts and updates related to their trips and targets. The screen fetches the user's trips and targets from the database and generates notifications based on their status. For example, it alerts users when a trip is starting soon, when they are currently on a trip, 
 // or when they have achieved a target. The notifications are displayed in a card format with an icon, title, and body text. If there are no notifications, it shows a friendly message indicating that the user is all caught up. The styling of the screen 
 // adapts to the app's theme, using colors from the theme context for backgrounds, text, borders, and icons.
-// The screen uses the useFocusEffect hook to load notifications whenever the screen comes into focus, ensuring that users always see the most up-to-date information when they navigate to this screen. It also handles loading states and error cases gracefully, providing a smooth user experience.
+// The screen uses the useFocusEffect hook to load notifications whenever the screen comes into focus, ensuring that users always see the most up-to-date information when they navigate to this screen. It also handles loading states and error cases 
+// gracefully, providing a smooth user experience.
+// The notifications are generated based on the status of the user's trips (upcoming, ongoing, past) and their progress towards targets. For example, if a trip is starting within the next 3 days, it generates an upcoming trip notification. If a trip is currently ongoing, it generates a notification about the trip and encourages the user to log activities. If a target is close to being achieved or has been achieved, it generates notifications to motivate the user and celebrate their accomplishments.
 type Notification = {
   id: string;
   icon: keyof typeof Ionicons.glyphMap;

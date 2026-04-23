@@ -21,7 +21,7 @@ import {
 // The screen validates the input and shows error messages for invalid fields. When the user saves the target, it inserts the new record into the database and navigates back to the previous screen.
 // The color selection is displayed as a row of colored dots, and the icon selection is displayed as a grid of icons. Users can select one color and one icon for their category.
 // The screen also handles loading states and uses the app's theme for styling. It is wrapped in a KeyboardAvoidingView to ensure the form is not obscured by the keyboard on mobile devices, and it uses a ScrollView to allow access to all fields on smaller screens.
-// The screen retrieves the list of available colors and icons from constants and displays them for selection. It also ensures that the target name is not empty before allowing the user to save.
+// The screens retrieves the list of available colors and icons from constants and displays them for selection. It also ensures that the target name is not empty before allowing the user to save.
 // If the user tries to save without entering a name, it shows an error message
 // prompting them to enter a target name. Once the target is successfully saved, it navig
 type Period = "weekly" | "monthly";

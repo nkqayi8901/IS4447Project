@@ -1,4 +1,4 @@
-import EmptyState from "@/components/EmptyState";
+﻿import EmptyState from "@/components/EmptyState";
 import TripCard from "@/components/TripCard";
 import { radius, shadow, spacing, text } from "@/constants/Styles";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,7 +18,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
+// This is the main screen that shows the user's trips. It displays a greeting with the user's name, a summary of their trip stats, and a search bar to filter trips by name or destination.
+//  The screen fetches the user's trips from the database and calculates additional metadata like activity count and streaks for each trip. It also handles navigation to the trip details screen when a trip card is pressed, and provides a floating action button to add a new trip. The styling of the screen adapts to the app's theme, using colors from the 
+// theme context for backgrounds, text, borders, and buttons. It also includes accessibility labels for better screen reader support.
+//  The useAuth hook is used to get the current user and loading state, while the useTheme hook allows the screen to adapt its 
+// styling based on the current theme (light/dark mode) for a consistent user experience across the app. The useFocusEffect hook is used to load the trips whenever the screen comes into focus, ensuring that users always see the most up-to-date information when they navigate to this screen. The screen also handles loading states and empty states gracefully,
+//  providing a smooth user experience.
+// The TripWithMeta type defines the structure of a trip object that includes additional metadata like activity count and streaks, which are calculated based on the activities associated with each trip. The getGreeting function returns a greeting message based on the current time of day, and the getStatus function determines whether a trip is upcoming, ongoing, or past based on its start and end dates. The TripsScreen component uses these functions and types to render the list of trips and their associated information in a user-friendly format.
 type TripWithMeta = {
   id: number;
   name: string;

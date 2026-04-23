@@ -19,6 +19,7 @@ import { requestNotificationPermissions } from '@/utils/notifications';
 // The app uses Expo Router for navigation, which allows for a file-based routing system. The Stack navigator defines the main flow of the app, while the Tabs navigator (defined in the (tabs) layout) handles the bottom tab navigation between Trips, Insights, Targets, and Settings screens.
 // The app also requests notification permissions on launch to enable features like daily reminders and target achievement notifications. The useEffect hook ensures that the splash screen is hidden once the fonts are loaded and the app is ready to be displayed to the user.
 // The app's theme is managed through the ThemeContext, allowing for easy toggling between light and dark modes, and ensuring that all screens and components use consistent styling based on the current theme.
+// The app's main features include tracking trips and activities, setting targets, viewing insights, and managing settings. Each of these features is implemented in separate screens that are defined in the Stack navigator, and the app ensures a smooth user experience with proper loading states, error handling, and responsive design for different screen sizes. The use of contexts for authentication and theming allows for a clean and maintainable codebase, while Expo Router simplifies navigation throughout the app.
 SplashScreen.preventAutoHideAsync();
 
 function RootContent() {
@@ -57,7 +58,7 @@ function RootContent() {
         <Stack.Screen name="trip/[id]/edit" options={{ title: 'Edit Trip', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="activity/add" options={{ title: 'Add Activity', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="activity/[id]/edit" options={{ title: 'Edit Activity', presentation: 'modal', headerTintColor: theme.primary }} />
-        <Stack.Screen name="category" options={{ title: 'Categories', headerTintColor: theme.primary }} />
+        <Stack.Screen name="category/index" options={{ title: 'Categories', headerTintColor: theme.primary }} />
         <Stack.Screen name="category/add" options={{ title: 'New Category', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="category/[id]/edit" options={{ title: 'Edit Category', presentation: 'modal', headerTintColor: theme.primary }} />
         <Stack.Screen name="notifications" options={{ title: 'Notifications', headerTintColor: theme.primary }} />

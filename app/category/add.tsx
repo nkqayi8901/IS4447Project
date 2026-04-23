@@ -24,7 +24,7 @@ import {
 // The screen retrieves the list of available colors and icons from constants and displays them for selection. It also ensures that the category name is not empty before allowing the user to save.
 // If the user tries to save without entering a name, it shows an error message
 // prompting them to enter a category name. Once the category is successfully saved, it navigates back to the previous screen where the new category will be
-// available for selection when adding or editing activities.
+// availables for selection when adding or editing activities.
 export default function AddCategoryScreen() {
   const { user } = useAuth();
   const { theme } = useTheme();

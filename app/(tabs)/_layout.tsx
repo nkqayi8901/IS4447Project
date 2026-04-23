@@ -13,6 +13,10 @@ import { seedIfEmpty } from '@/db/seed';
 // checking auth status on app launch.
 // Each tab has its own screen component 
 // defined in the respective files (index.tsx for Trips, insights.tsx for Insights, etc.).
+// The useAuth hook provides the current user and loading state.
+// The useTheme hook allows the layout to adapt its styling based on the current theme (light/dark mode) for a consistent user experience across the app. 
+// The Tabs component from Expo Router is used to define the bottom tab navigation structure, with icons and labels for each tab. 
+// The layout ensures that users are directed to the appropriate screens based on their authentication status, providing a seamless experience as they navigate through the app's main features.
 export default function TabLayout() {
   const { user, loading } = useAuth();
   const { theme } = useTheme();

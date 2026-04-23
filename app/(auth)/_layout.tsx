@@ -8,6 +8,10 @@ import { ActivityIndicator, View } from 'react-native';
 //  If not, it shows the auth screens (login/signup).
 // It also shows a loading state while checking auth 
 // status on app launch.
+// The useAuth hook provides the current user and loading state.
+// The useTheme hook allows the layout to adapt its styling based on the current theme (light/dark mode) for a consistent user experience across the app. 
+// The Stack component from Expo Router is used to define the navigation structure for the authentication screens, which are rendered when there is no authenticated user. 
+// The layout ensures that users are directed to the appropriate screens based on their authentication status, providing a seamless entry point into the app's main features once they log in or sign up.
 export default function AuthLayout() {
   const { user, loading } = useAuth();
   const { theme } = useTheme();

@@ -23,7 +23,7 @@ import {
 // The screen retrieves the list of categories from the database on mount and populates the category list.
 // It also handles deleting categories with a confirmation alert, and it updates the local state to reflect changes without needing to reload the entire list from the database after each operation.
 // When deleting a category, it also shows a warning that any activities using that category will lose their association, but it does not delete the activities themselves.
-// The screen ensures that users can manage their categories effectively, which helps them organize their activities better when adding or editing them.
+// The screens ensures that users can manage their categories effectively, which helps them organize their activities better when adding or editing them.
 export default function CategoriesScreen() {
   const { user } = useAuth();
   const { theme } = useTheme();

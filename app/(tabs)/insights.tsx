@@ -24,7 +24,7 @@ import { BarChart, PieChart } from "react-native-chart-kit";
 // to load the relevant data from the database whenever the screen is focused, ensuring it
 // always shows up-to-date insights after adding/editing trips or activities.
 // The charts are implemented using react-native-chart-kit, and the screen is styled to match the app's theme.
-// If there are no activities, it shows an empty state prompting the user to add some activities to see insights here.
+// If theres are no activities, it shows an empty state prompting the user to add some activities to see insights here.
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 type PeriodKey = "weekly" | "monthly" | "all";

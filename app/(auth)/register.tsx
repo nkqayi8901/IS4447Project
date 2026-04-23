@@ -17,6 +17,8 @@ import { text, shadow, radius, spacing } from '@/constants/Styles';
 // covering the form on mobile devices.
 // The screen also includes a link to the 
 // login screen for users who already have an account.
+// The styling of the screen adapts to the app's theme, using colors from the theme context for backgrounds, text, borders, and buttons. It also includes accessibility labels for better screen reader support.
+// The useAuth hook is used to handle the registration logic, while the useTheme hook allows the screen to adapt its styling based on the current theme (light/dark mode) for a consistent user experience across the app.
 export default function RegisterScreen() {
   const { register } = useAuth();
   const { theme } = useTheme();

@@ -24,6 +24,7 @@ import {
 // If there are no targets, it shows an empty state prompting the user to create their first target.
 // The screen uses useFocusEffect to reload the targets and progress whenever the screen is focused, ensuring
 // it always shows up-to-date information after adding/editing targets or activities.
+// The styling of the screen adapts to the app's theme, using colors from the theme context for backgrounds, text, borders, and progress bars. It also includes accessibility labels for better screen reader support.
 type TargetWithProgress = {
   id: number;
   name: string;

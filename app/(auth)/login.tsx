@@ -17,6 +17,8 @@ import { text, shadow, radius, spacing } from '@/constants/Styles';
 // The screen is wrapped in a KeyboardAvoidingView to ensure
 // the form is not obscured by the keyboard on 
 // mobile devices.
+// The styling of the screen adapts to the app's theme, using colors from the theme context for backgrounds, text, borders, and buttons. It also includes accessibility labels for better screen reader support.
+// The screen provides a link to the registration screen for users who don't have an account, and it shows a demo hint to encourage new users to sign up and explore the app's features.
 export default function LoginScreen() {
   const { login } = useAuth();
   const { theme } = useTheme();

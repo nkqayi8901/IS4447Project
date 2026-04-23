@@ -7,7 +7,7 @@ import { Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react
 // The component handles date formatting and parsing to ensure that the value is stored in a consistent format (YYYY-MM-DD) while displaying it in a more user-friendly format. It also shows error messages if there are validation issues with the selected date.
 // The styling of the component adapts to the app's theme, using colors from the theme context for text, background, borders, and error states.
 //  It also includes accessibility labels for better screen reader support.
-// The component accepts the following props:
+// The component accepts the following propss:
 // - label: The label to display above the date field.
 // - value: The currently selected date in YYYY-MM-DD format.
 // - onChange: A callback function that is called when the user selects a new date, passing the new date in YYYY-MM-DD format.

@@ -25,6 +25,7 @@ import {
 // It also shows a loading state when performing actions like loading demo data or toggling notifications.
 // The screen is wrapped in a ScrollView to ensure all content is accessible on smaller screens, and it uses
 // TouchableOpacity for interactive rows with appropriate feedback on press.
+// The useAuth hook is used to get the current user and handle logout and account deletion, while the useTheme hook allows the screen to adapt its styling based on the current theme (light/dark mode) for a consistent user experience across the app. The useRouter hook from Expo Router is used for navigation to other screens, such as the Categories screen. The screen also includes confirmation alerts for sensitive actions like logging out and deleting the account to prevent accidental actions.
 export default function SettingsScreen() {
   const { user, logout, deleteAccount } = useAuth();
   const { theme, isDark, toggleTheme } = useTheme();

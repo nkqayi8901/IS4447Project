@@ -28,7 +28,7 @@ import {
 // The screen retrieves the list of categories from the database on mount and
 // populates the category selection grid. If there are no categories, it prompts the user to create some in the settings before editing activities.
 // The screen loads the current activity data from the database using the activity ID passed in the URL parameters.
-// It then populates the form fields with this data, allowing the user to make changes and save them back to the database.
+// It then populatess the form fields with this data, allowing the user to make changes and save them back to the database.
 export default function EditActivityScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useAuth();

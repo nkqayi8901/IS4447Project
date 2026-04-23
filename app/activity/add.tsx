@@ -25,6 +25,7 @@ import {
 // The screen is wrapped in a KeyboardAvoidingView to ensure the form is not obscured by the keyboard on mobile devices, and it uses a
 //  ScrollView to allow access to all fields on smaller screens.
 // The screen retrieves the list of categories from the database on mount and populates the category selection grid. If there are no categories, it prompts the user to create some in the settings before adding activities.
+// The screen uses the useAuth hook to get the current user and the useTheme hook to adapt its styling based on the current theme (light/dark mode) for a consistent user experience across the app. The useRouter hook from Expo Router is used for navigation after saving the activity. The form fields include validation to ensure required information is provided, and the save button shows a loading state while the activity is being saved to the database.
 export default function AddActivityScreen() {
   const { tripId, name: prefillName } = useLocalSearchParams<{ tripId: string; name?: string }>();
   const { user } = useAuth();

@@ -1,5 +1,5 @@
 import { db } from "@/db/client";
-import { users } from "@/db/schema";
+import { activities, categories, targets, trips, users } from "@/db/schema";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { eq } from "drizzle-orm";
 import * as Crypto from "expo-crypto";
@@ -135,22 +135,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const deleteAccount = async () => {
     if (!user) return;
-    // Delete all user data via raw sql to handle cascades
-    const { db: rawDb } = await import("@/db/client");
-    const { trips, categories, targets, activities } =
-      await import("@/db/schema");
-    const { eq: eqFn } = await import("drizzle-orm");
-    const userTrips = await rawDb
-      .select()
-      .from(trips)
-      .where(eqFn(trips.userId, user.id));
+    const userTrips = await db.select().from(trips).where(eq(trips.userId, user.id));
     for (const trip of userTrips) {
-      await rawDb.delete(activities).where(eqFn(activities.tripId, trip.id));
+      await db.delete(activities).where(eq(activities.tripId, trip.id));
     }
-    await rawDb.delete(trips).where(eqFn(trips.userId, user.id));
-    await rawDb.delete(categories).where(eqFn(categories.userId, user.id));
-    await rawDb.delete(targets).where(eqFn(targets.userId, user.id));
-    await rawDb.delete(users).where(eqFn(users.id, user.id));
+    await db.delete(trips).where(eq(trips.userId, user.id));
+    await db.delete(categories).where(eq(categories.userId, user.id));
+    await db.delete(targets).where(eq(targets.userId, user.id));
+    await db.delete(users).where(eq(users.id, user.id));
     await AsyncStorage.removeItem("userId");
     setUser(null);
   };

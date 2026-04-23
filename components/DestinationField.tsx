@@ -9,7 +9,7 @@ import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View 
 // - label: The label to display above the input field.
 // - value: The currently selected location as a string.
 // - onChange: A callback function that is called when the user types or selects a location, passing the new location string.
-// - error: An optional error message to display if there is a validation issue with the input.
+// - error: An optional error message to displays if there is a validation issue with the input.
 type GeoResult = { id: number; name: string; country: string; admin1?: string };
 
 type Props = {

@@ -3,7 +3,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 import { shadow, radius } from '@/constants/Styles';
 import CategoryBadge from './CategoryBadge';
-
+// The ActivityCard component is a reusable UI component that displays information about a specific activity in a card format. It shows the activity name, date, duration, category, and any notes associated with the activity. The card also includes a colored bar on the left side that indicates the category color or a success color if the activity is marked as completed.
+// The component accepts props for the activity details, as well as callback functions for when the card is pressed, when the activity is deleted, and 
+// when the completion status is toggled. It also uses the app's theme to adapt its styling based on light or dark mode. 
+// The card includes accessibility labels for better screen reader support, and it handles user interactions such as marking an activity as complete or deleting it with confirmation alerts to prevent accidental deletions.
+// The ActivityCard component can be used in various parts of the app where activities are displayed, such as in the Trip Details screen or in lists of activities.
+//  It provides a consistent and visually appealing way to present activity information while also allowing users to interact with their activities directly from the card.
+// The component's styling includes a left bar that changes color based on the activity's category or completion status, a checkbox for marking the activity as complete, and a badge that shows the category name and icon. The footer of the card displays metadata such as the date, duration, and repeat count, along with a "Done" badge if the activity is completed. The component also handles edge cases such as long activity names or notes by truncating them and providing a clean layout.
 type Props = {
   name: string;
   date: string;
