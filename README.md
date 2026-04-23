@@ -1,3 +1,7 @@
+Solomon Github Link : https://github.com/nkqayi8901/IS4447Project
+Solomon Expo Link: 
+
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
